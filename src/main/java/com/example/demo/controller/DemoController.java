@@ -60,10 +60,11 @@ public class DemoController {
 		Optional<Country> savedCountry = null;
 		
 		try {
-			savedCountry = countryService.updateCountry(id, country);
+			savedCountry = countryService.getCountryById(id);
 			if(savedCountry.isEmpty()) {
 				return new ResponseEntity<Country>(HttpStatus.NOT_FOUND);
 			} else {
+				savedCountry = countryService.updateCountry(id, country);
 				return new ResponseEntity<Country>(savedCountry.get(), HttpStatus.OK);
 			}
 		} catch (Exception e) {
@@ -73,16 +74,16 @@ public class DemoController {
 	}
 	
 	@DeleteMapping(path = "/country/{id}")
-	public ResponseEntity<?> deleteCountry(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteCountry(@PathVariable Long id) {
 		Optional<Country> savedCountry = null;
 		
 		try {
 			savedCountry = countryService.getCountryById(id);
 			if(savedCountry.isEmpty()) {
-				return new ResponseEntity<Country>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
 				countryService.deleteCountry(id);
-				return new ResponseEntity<Country>(HttpStatus.OK);
+				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
